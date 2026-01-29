@@ -4,7 +4,6 @@
 
 {% block content %}
 
-<!-- Add a hidden file input and JavaScript -->
 <input type="file" id="fileInput" accept=".txt,.rtf" style="display: none;">
 
 <a href="#" onclick="openFileDialog()" class="btn btn-sm btn-success">
@@ -16,7 +15,7 @@ function openFileDialog() {
     document.getElementById('fileInput').click();
 }
 
-// Handle file selection
+// select file
 document.getElementById('fileInput').addEventListener('change', function(e) {
     if (this.files.length === 0) return;
 
@@ -24,7 +23,7 @@ document.getElementById('fileInput').addEventListener('change', function(e) {
     const formData = new FormData();
     formData.append('file', file);
 
-    // Show loading state
+    // loading state
     const btn = document.querySelector('a[onclick="openFileDialog()"]');
     const originalText = btn.textContent;
     btn.textContent = 'Обработка...';
@@ -32,7 +31,7 @@ document.getElementById('fileInput').addEventListener('change', function(e) {
     btn.classList.add('btn-secondary');
     btn.style.pointerEvents = 'none';
 
-    // Send to server
+    // send to server
     fetch('/fill', {
         method: 'POST',
         body: formData
@@ -55,7 +54,7 @@ document.getElementById('fileInput').addEventListener('change', function(e) {
         btn.style.pointerEvents = 'auto';
     });
 
-    // Reset file input
+    // reset file input
     this.value = '';
 });
 </script>
