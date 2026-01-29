@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Слова{% endblock %}
+
+{% block content %}
+
+<a href="{{ url_for('fill') }}" class="btn btn-sm btn-success">
+    Заполнить словарь
+</a>
+<a href="{{ url_for('clear') }}" class="btn btn-sm btn-danger"
+   onclick="return confirm('Очистить словарь?')">
+    Очистить словарь
+</a>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Слово</th>
+                        <th>Часть речи</th>
+                        <th>Основа</th>
+                        <th>Окончание</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for word in words %}
+                    <tr>
+                        <td>{{ word[0] }}</td>
+                        <td>{{ word[1] }}</td>
+                        <td>{{ word[2] }}</td>
+                        <td>{{ word[3] }}</td>
+                        <td>{{ word[4] }}</td>
+                        <td>
+                            <a href="{{ url_for('add_base_and_ending', word_id=word[0]) }}" class="btn btn-sm btn-info"
+                               onclick="return confirm('Разобрать слово по составу?')">
+                                Разобрать
+                            </a>
+                        </td>
+                    </tr>
+
+
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

@@ -13,12 +13,21 @@ def init_db():
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS Dictionary (
     id INTEGER PRIMARY KEY,
-    word TEXT NOT NULL,
+    word TEXT NOT NULL UNIQUE,
     part_of_speech TEXT NOT NULL,
     base TEXT NOT NULL,
     ending TEXT NOT NULL
     )
     ''')
+
+    connection.commit()
+    connection.close()
+
+def clear_db():
+    connection = sqlite3.connect(DATABASE_NAME)
+    cursor = connection.cursor()
+
+    cursor.execute("DELETE FROM Dictionary")
 
     connection.commit()
     connection.close()
@@ -54,17 +63,22 @@ def add_words_from_text(text, morph: pymorphy3.MorphAnalyzer()):
         add_base_word(lexeme, part_of_speech, '', '')
         print("Added word:", lexeme)
 
-def analyze_word(word):
+def analyze_word(word_id):
     connection = sqlite3.connect(DATABASE_NAME)
     cursor = connection.cursor()
+
+    cursor.execute('''
+    SELECT word FROM Dictionary where id=?
+    ''',(word_id,))
+    word = cursor.fetchone()[0]
 
     base, ending = get_base_and_ending(word)
 
     cursor.execute('''
     UPDATE Dictionary
     SET base=?, ending=?
-    WHERE word=?
-    ''', (base, ending, word))
+    WHERE id=?
+    ''', (base, ending, word_id))
 
     connection.commit()
     connection.close()
