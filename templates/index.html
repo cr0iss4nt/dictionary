@@ -4,9 +4,63 @@
 
 {% block content %}
 
-<a href="{{ url_for('fill') }}" class="btn btn-sm btn-success">
+<!-- Add a hidden file input and JavaScript -->
+<input type="file" id="fileInput" accept=".txt,.rtf" style="display: none;">
+
+<a href="#" onclick="openFileDialog()" class="btn btn-sm btn-success">
     Заполнить словарь
 </a>
+
+<script>
+function openFileDialog() {
+    document.getElementById('fileInput').click();
+}
+
+// Handle file selection
+document.getElementById('fileInput').addEventListener('change', function(e) {
+    if (this.files.length === 0) return;
+
+    const file = this.files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+
+    // Show loading state
+    const btn = document.querySelector('a[onclick="openFileDialog()"]');
+    const originalText = btn.textContent;
+    btn.textContent = 'Обработка...';
+    btn.classList.remove('btn-success');
+    btn.classList.add('btn-secondary');
+    btn.style.pointerEvents = 'none';
+
+    // Send to server
+    fetch('/fill', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (response.redirected) {
+            window.location.href = response.url;
+        } else if (response.ok) {
+            window.location.reload();
+        } else {
+            throw new Error('Upload failed');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Ошибка при загрузке файла');
+        btn.textContent = originalText;
+        btn.classList.add('btn-success');
+        btn.classList.remove('btn-secondary');
+        btn.style.pointerEvents = 'auto';
+    });
+
+    // Reset file input
+    this.value = '';
+});
+</script>
+
+
 <a href="{{ url_for('clear') }}" class="btn btn-sm btn-danger"
    onclick="return confirm('Очистить словарь?')">
     Очистить словарь
