@@ -3,8 +3,8 @@ from pathlib import Path
 
 
 def parse_txt(filename):
-    with open(filename, 'r') as f:
-        content = ' '.join(f.read().splitlines())
+    with open(filename, 'r', encoding='utf-8') as f:
+        content = f.read()
         return content
 
 def parse_rtf(filename):
