@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}Словоформа: {{word}} {% endblock %}
+
+{% block content %}
+<h2>Создать словоформу слова: {{word}}</h2>
+Часть речи: прилагательное
+
+<p>Выберите параметры для образования словоформы.</p>
+
+<form id="inflection-form" method="POST" action="{{ url_for('inflect_adjective') }}">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-3">
+                <select class="form-select" name="case" id="case" aria-label="Падеж">
+                    <option value="nomn">Именительный</option>
+                    <option value="gent">Родительный</option>
+                    <option value="datv">Дательный</option>
+                    <option value="accs">Винительный</option>
+                    <option value="ablt">Творительный</option>
+                    <option value="loct">Предложный</option>
+                </select>
+            </div>
+            <div class="col-sm-3">
+                <select class="form-select" name="number" id="number" aria-label="Число">
+                    <option value="sing" selected>Единственное</option>
+                    <option value="plur">Множественное</option>
+                </select>
+            </div>
+            <div class="col-sm-3">
+                <select class="form-select" name="gender" id="gender" aria-label="Род">
+                    <option value="masc">Мужской</option>
+                    <option value="femn">Женский</option>
+                    <option value="neut">Средний</option>
+                </select>
+            </div>
+            <div class="col-sm-3">
+                <input type="hidden" name="adjective" id="adjective" value="{{ word }}">
+                <button type="submit" class="btn btn-sm btn-info">
+                    Сделать словоформу
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<div class="mt-4" id="result-container" style="display: none;">
+    <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">Результат:</h4>
+        <p>Исходное слово: <strong>{{ word }}</strong></p>
+        <hr>
+        <p class="mb-0">
+            Словоформа: <strong id="inflected-word"></strong>
+        </p>
+    </div>
+</div>
+
+
+<div class="mt-4" id="error-container" style="display: none;">
+    <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading">Ошибка!</h4>
+        <p id="error-message"></p>
+    </div>
+</div>
+
+
+<script>
+     document.getElementById('number').addEventListener('change', function() {
+        if (this.value === 'plur') {
+            document.getElementById('gender').style.display = 'none';
+        }
+        else {
+            document.getElementById('gender').style.display = 'block';
+        }
+    });
+
+</script>
+
+<script>
+document.getElementById('inflection-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const submitBtn = this.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn.textContent;
+    submitBtn.textContent = 'Обработка...';
+    submitBtn.disabled = true;
+
+    document.getElementById('result-container').style.display = 'none';
+    document.getElementById('error-container').style.display = 'none';
+
+    const formData = new FormData(this);
+
+    fetch('{{ url_for("inflect_adjective") }}', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.text();
+    })
+    .then(inflectedWord => {
+        document.getElementById('inflected-word').textContent = inflectedWord;
+        document.getElementById('result-container').style.display = 'block';
+    })
+    .catch(error => {
+        document.getElementById('error-message').textContent = 'Произошла ошибка при создании словоформы.';
+        document.getElementById('error-container').style.display = 'block';
+        console.error('Error:', error);
+    })
+    .finally(() => {
+        submitBtn.textContent = originalBtnText;
+        submitBtn.disabled = false;
+    });
+});
+</script>
+
+{% endblock %}

@@ -76,6 +76,8 @@ def make_word_form(word):
     part_of_speech = get_part_of_speech(word, morph)
     if part_of_speech == 'NOUN':
         return render_template('make_word_form_noun.html', word=word)
+    elif part_of_speech == 'ADJF':
+        return render_template('make_word_form_adjective.html', word=word)
     else:
         return 'WIP'
 
@@ -86,6 +88,26 @@ def inflect_noun():
     number = request.form['number']
     inflected_noun = inflector.inflect_noun(noun, morph, case, number)
     return inflected_noun
+
+# TODO: plural doesn't inflect properly
+@app.route('/inflect/adjective/', methods=['POST'])
+def inflect_adjective():
+    adjective = request.form['adjective']
+    case = request.form['case']
+    number = request.form['number']
+    if number == 'plur':
+        inflected_adjective = inflector.inflect_adjective_plural(adjective, morph, case=case)
+    else:
+        gender = request.form['gender']
+        inflected_adjective = inflector.inflect_adjective_singular(adjective, morph, case=case, gender=gender)
+    return inflected_adjective
+
+#@app.route('/inflect/adjective/plural', methods=['POST'])
+#def inflect_adjective_plural():
+#    adjective = request.form['adjective']
+#    case = request.form['case']
+#    inflected_adjective = inflector.inflect_adjective_plural(adjective, morph, case=case)
+#    return inflected_adjective
 
 
 if __name__ == '__main__':
