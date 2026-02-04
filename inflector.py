@@ -1,11 +1,8 @@
 import pymorphy3
 
-CASES = ['nomn', 'gent', 'datv', 'accs', 'ablt', 'loct']
-GENDERS = ['masc', 'femn', 'neut']
-PERSONS = ['1per', '2per', '3per']
-MOODS = ['indc', 'excl']
-NUMBERS = ['sing', 'plur']
-TENSES = ['pres', 'past', 'futr']
+def get_part_of_speech(word, morph: pymorphy3.MorphAnalyzer()):
+    parsed_word = morph.parse(word)[0]
+    return parsed_word.tag.POS
 
 def inflect(word, morph: pymorphy3.MorphAnalyzer(), word_features: set):
     parsed_word = morph.parse(word)[0]

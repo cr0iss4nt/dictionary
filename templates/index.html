@@ -76,7 +76,7 @@ document.getElementById('fileInput').addEventListener('change', function(e) {
                         <th>Часть речи</th>
                         <th>Основа</th>
                         <th>Окончание</th>
-                        <th></th>
+                        <th>Действия</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -88,10 +88,15 @@ document.getElementById('fileInput').addEventListener('change', function(e) {
                         <td>{{ word[3] }}</td>
                         <td>{{ word[4] }}</td>
                         <td>
-                            <a href="{{ url_for('add_base_and_ending', word_id=word[0]) }}" class="btn btn-sm btn-info"
+                            <a href="{{ url_for('add_base_and_ending', word=word[1]) }}" class="btn btn-sm btn-info"
                                onclick="return confirm('Разобрать слово по составу?')">
                                 Разобрать
                             </a>
+                            {% if word[2] == 'NOUN' %}
+                            <a href="{{ url_for('make_word_form', word=word[1]) }}" class="btn btn-sm btn-info">
+                                Сделать словоформу
+                            </a>
+                            {% endif %}
                         </td>
                     </tr>
 

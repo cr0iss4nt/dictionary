@@ -3,9 +3,11 @@ import os
 import pymorphy3
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 
+import inflector
 from database import get_all_words, analyze_word, clear_db, add_words_from_text, init_db
 
 from file_parser import parse_file
+from inflector import get_part_of_speech
 
 init_db()
 morph = pymorphy3.MorphAnalyzer()
@@ -27,9 +29,9 @@ def clear():
     clear_db()
     return redirect(url_for('index'))
 
-@app.route('/analyze/<word_id>')
-def add_base_and_ending(word_id):
-    analyze_word(word_id)
+@app.route('/analyze/<word>')
+def add_base_and_ending(word):
+    analyze_word(word)
     return redirect(url_for('index'))
 
 
@@ -69,6 +71,21 @@ def fill():
 
     return redirect(url_for('index'))
 
+@app.route('/make-word-form/<word>')
+def make_word_form(word):
+    part_of_speech = get_part_of_speech(word, morph)
+    if part_of_speech == 'NOUN':
+        return render_template('make_word_form_noun.html', word=word)
+    else:
+        return 'WIP'
+
+@app.route('/inflect/noun/', methods=['POST'])
+def inflect_noun():
+    noun = request.form['noun']
+    case = request.form['case']
+    number = request.form['number']
+    inflected_noun = inflector.inflect_noun(noun, morph, case, number)
+    return inflected_noun
 
 
 if __name__ == '__main__':
