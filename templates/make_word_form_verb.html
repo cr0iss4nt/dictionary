@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}Словоформа: {{word}} {% endblock %}
+
+{% block content %}
+<h2>Создать словоформу слова: {{word}}</h2>
+Часть речи: глагол
+
+<p>Выберите параметры для образования словоформы.</p>
+
+<form id="inflection-form" method="POST" action="{{ url_for('inflect_adjective') }}">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-2">
+                <select class="form-select" name="mood" id="mood" aria-label="Наклонение">
+                    <option value="nomn">Изъявительное</option>
+                    <option value="gent">Повелительное</option>
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <select class="form-select" name="number" id="number" aria-label="Число">
+                    <option value="sing">Единственное</option>
+                    <option value="plur">Множественное</option>
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <select class="form-select" name="gender" id="gender" aria-label="Род">
+                    <option value="NONE">-</option>
+                    <option value="masc">Мужской</option>
+                    <option value="femn">Женский</option>
+                    <option value="neut">Средний</option>
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <select class="form-select" name="tense" id="tense" aria-label="Время">
+                    <option value="NONE">-</option>
+                    <option value="pres">Настоящее</option>
+                    <option value="past">Прошлое</option>
+                    <option value="futr">Будущее</option>
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <select class="form-select" name="person" id="person" aria-label="Лицо">
+                    <option value="NONE">-</option>
+                    <option value="pres">1 лицо</option>
+                    <option value="past">2 лицо</option>
+                    <option value="futr">3 лицо</option>
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <input type="hidden" name="verb" id="verb" value="{{ word }}">
+                <button type="submit" class="btn btn-sm btn-info">
+                    Сделать словоформу
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<div class="mt-4" id="result-container" style="display: none;">
+    <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">Результат:</h4>
+        <p>Исходное слово: <strong>{{ word }}</strong></p>
+        <hr>
+        <p class="mb-0">
+            Словоформа: <strong id="inflected-word"></strong>
+        </p>
+    </div>
+</div>
+
+
+<div class="mt-4" id="error-container" style="display: none;">
+    <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading">Ошибка!</h4>
+        <p id="error-message"></p>
+    </div>
+</div>
+
+
+<script>
+document.getElementById('inflection-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const submitBtn = this.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn.textContent;
+    submitBtn.textContent = 'Обработка...';
+    submitBtn.disabled = true;
+
+    document.getElementById('result-container').style.display = 'none';
+    document.getElementById('error-container').style.display = 'none';
+
+    const formData = new FormData(this);
+
+    fetch('{{ url_for("inflect_verb") }}', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.text();
+    })
+    .then(inflectedWord => {
+        document.getElementById('inflected-word').textContent = inflectedWord;
+        document.getElementById('result-container').style.display = 'block';
+    })
+    .catch(error => {
+        document.getElementById('error-message').textContent = 'Произошла ошибка при создании словоформы.';
+        document.getElementById('error-container').style.display = 'block';
+        console.error('Error:', error);
+    })
+    .finally(() => {
+        submitBtn.textContent = originalBtnText;
+        submitBtn.disabled = false;
+    });
+});
+</script>
+
+{% endblock %}
