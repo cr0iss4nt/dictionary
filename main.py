@@ -1,10 +1,11 @@
 import os
+from io import BytesIO
 
 import pymorphy3
-from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, send_file
 
 import inflector
-from database import get_all_words, analyze_word, clear_db, add_words_from_text, init_db
+from database import get_all_words, analyze_word, clear_db, add_words_from_text, init_db, db_to_text
 
 from file_parser import parse_file
 from inflector import get_part_of_speech
@@ -100,7 +101,6 @@ def inflect_adjective():
     inflected_adjective = inflector.inflect(adjective, morph, {case, number, gender})
     return inflected_adjective
 
-# TODO: fix verb inflection
 @app.route('/inflect/verb/', methods=['POST'])
 def inflect_verb():
     verb = request.form['verb']
@@ -111,6 +111,28 @@ def inflect_verb():
     person = request.form['person']
     inflected_verb = inflector.inflect(verb, morph, {mood, number, gender, tense, person})
     return inflected_verb
+
+
+@app.route('/export')
+def export_dictionary():
+    try:
+        content = db_to_text()
+
+        from datetime import datetime
+        filename = f'dictionary_{datetime.today().strftime("%Y%m%d%H%M%S")}.txt'
+
+        file_data = BytesIO(content.encode('utf-8'))
+
+        return send_file(
+            file_data,
+            as_attachment=True,
+            download_name=filename,
+            mimetype='text/plain'
+        )
+
+    except Exception as e:
+        print(f"Export error: {e}")
+        return "Error during export", 500
 
 
 if __name__ == '__main__':

@@ -1,4 +1,5 @@
 import sqlite3
+
 import pymorphy3
 
 from lexemizer import text_to_lexemes
@@ -80,3 +81,13 @@ def analyze_word(word):
 
     connection.commit()
     connection.close()
+
+def db_to_text():
+    words = get_all_words()
+    output = []
+    for word in words:
+        output.append(f"""{word[1].upper()}
+Часть речи: {word[2]}
+Основа: {word[3]}
+Окончание: {word[4]}""")
+    return '\n\n\n'.join(output)
