@@ -23,12 +23,13 @@
             </div>
             <div class="col-sm-3">
                 <select class="form-select" name="number" id="number" aria-label="Число">
-                    <option value="sing" selected>Единственное</option>
+                    <option value="sing">Единственное</option>
                     <option value="plur">Множественное</option>
                 </select>
             </div>
             <div class="col-sm-3">
                 <select class="form-select" name="gender" id="gender" aria-label="Род">
+                    <option value="NONE">-</option>
                     <option value="masc">Мужской</option>
                     <option value="femn">Женский</option>
                     <option value="neut">Средний</option>
@@ -64,18 +65,6 @@
     </div>
 </div>
 
-
-<script>
-     document.getElementById('number').addEventListener('change', function() {
-        if (this.value === 'plur') {
-            document.getElementById('gender').style.display = 'none';
-        }
-        else {
-            document.getElementById('gender').style.display = 'block';
-        }
-    });
-
-</script>
 
 <script>
 document.getElementById('inflection-form').addEventListener('submit', function(event) {
