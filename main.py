@@ -3,7 +3,7 @@ import os
 import pymorphy3
 from flask import Flask
 
-from db import init_db
+from modules.db import init_db
 
 init_db()
 morph = pymorphy3.MorphAnalyzer()

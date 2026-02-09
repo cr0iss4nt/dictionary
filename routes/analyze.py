@@ -1,6 +1,6 @@
 from flask import redirect, url_for
 
-from db import analyze_word
+from modules.db import analyze_word
 from __main__ import app
 
 

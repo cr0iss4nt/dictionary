@@ -1,7 +1,7 @@
 from flask import render_template, request
 
-import inflector
-from inflector import get_part_of_speech
+from modules import inflector
+from modules.inflector import get_part_of_speech
 from __main__ import app, morph
 
 

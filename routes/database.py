@@ -3,9 +3,9 @@ from io import BytesIO
 
 from flask import redirect, url_for, render_template, request, send_file
 
-import db
-from db import clear_db
-from file_parser import parse_file
+from modules import db
+from modules.db import clear_db
+from modules.file_parser import parse_file
 from __main__ import app, morph
 
 

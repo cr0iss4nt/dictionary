@@ -1,6 +1,6 @@
 from flask import render_template
 
-from db import get_all_words
+from modules.db import get_all_words
 from __main__ import app
 
 
