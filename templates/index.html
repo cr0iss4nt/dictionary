@@ -6,18 +6,37 @@
 
 <input type="file" id="fileInput" accept=".txt,.rtf" style="display: none;">
 
-<a href="#" onclick="openFileDialog()" class="btn btn-sm btn-success">
-    Импорт
-</a>
+<div class="container mb-3">
+    <a href="#" onclick="openFileDialog()" class="btn btn-sm btn-success">
+        Импорт
+    </a>
 
-<a href="#" onclick="exportDictionary()" class="btn btn-sm btn-primary">
-    Экспорт
-</a>
+    <a href="#" onclick="exportDictionary()" class="btn btn-sm btn-primary">
+        Экспорт
+    </a>
 
-<a href="{{ url_for('clear') }}" class="btn btn-sm btn-danger"
-   onclick="return confirm('Очистить словарь?')">
-    Очистить
-</a>
+    <a href="{{ url_for('clear') }}" class="btn btn-sm btn-danger"
+       onclick="return confirm('Очистить словарь?')">
+        Очистить
+    </a>
+</div>
+
+
+
+<form id="add-word-form" method="POST" action="{{ url_for('add_word') }}">
+    <div class="container mb-3">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="word" name="word" placeholder="Новое слово">
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-plus"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 
 <script>
 function openFileDialog() {

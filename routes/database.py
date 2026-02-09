@@ -14,6 +14,12 @@ def clear():
     clear_db()
     return redirect(url_for('index'))
 
+@app.route('/add-word', methods=['POST'])
+def add_word():
+    word = request.form['word']
+    db.add_word(word, morph)
+    return redirect(url_for('index'))
+
 @app.route('/edit/<word>')
 def edit(word):
     return render_template('edit_word.html', word=word)
