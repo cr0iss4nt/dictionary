@@ -3,7 +3,7 @@ import sqlite3
 import pymorphy3
 
 from lexemizer import text_to_lexemes
-from word_analyzer import make_session, get_base_and_ending
+from word_analyzer import get_base_and_ending
 
 DATABASE_NAME = 'dictionary.db'
 
