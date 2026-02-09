@@ -33,13 +33,13 @@ def clear_db():
     connection.commit()
     connection.close()
 
-def get_all_words():
+def get_words(query = ''):
     init_db()
 
     connection = sqlite3.connect(DATABASE_NAME)
     cursor = connection.cursor()
 
-    cursor.execute("SELECT * FROM Dictionary ORDER BY word")
+    cursor.execute("SELECT * FROM Dictionary WHERE word LIKE ? ORDER BY word", ('%' + query + '%',))
     words = cursor.fetchall()
 
     connection.close()
@@ -104,7 +104,7 @@ def delete_word(word):
     connection.close()
 
 def db_to_text():
-    words = get_all_words()
+    words = get_words()
     output = []
     for word in words:
         output.append(f"""{word[1].upper()}
