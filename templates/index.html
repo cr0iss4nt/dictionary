@@ -7,11 +7,11 @@
 <input type="file" id="fileInput" accept=".txt,.rtf" style="display: none;">
 
 <a href="#" onclick="openFileDialog()" class="btn btn-sm btn-success">
-    Заполнить
+    Импорт
 </a>
 
 <a href="#" onclick="exportDictionary()" class="btn btn-sm btn-primary">
-    Экспортировать
+    Экспорт
 </a>
 
 <a href="{{ url_for('clear') }}" class="btn btn-sm btn-danger"
@@ -100,7 +100,7 @@ document.getElementById('fileInput').addEventListener('change', function(e) {
     btn.style.pointerEvents = 'none';
 
     // send to server
-    fetch('/fill', {
+    fetch('/import', {
         method: 'POST',
         body: formData
     })

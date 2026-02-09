@@ -37,7 +37,7 @@ def add_base_and_ending(word):
     return redirect(url_for('index'))
 
 
-@app.route('/fill', methods=['GET', 'POST'])
+@app.route('/import', methods=['GET', 'POST'])
 def fill():
     if request.method == 'POST':
         if 'file' not in request.files:
