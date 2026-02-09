@@ -4,8 +4,9 @@ from io import BytesIO
 import pymorphy3
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, send_file
 
+import database
 import inflector
-from database import get_all_words, analyze_word, clear_db, add_words_from_text, init_db, db_to_text
+from database import get_all_words, analyze_word, clear_db, add_words_from_text, init_db, db_to_text, delete_word
 
 from file_parser import parse_file
 from inflector import get_part_of_speech
@@ -111,6 +112,23 @@ def inflect_verb():
     person = request.form['person']
     inflected_verb = inflector.inflect(verb, morph, {mood, number, gender, tense, person})
     return inflected_verb
+
+@app.route('/edit/<word>')
+def edit(word):
+    return render_template('edit_word.html', word=word)
+
+@app.route('/edit-word', methods=['POST'])
+def edit_word():
+    word = request.form['word']
+    base = request.form['base']
+    ending = request.form['ending']
+    database.edit_word(word, base, ending)
+    return redirect(url_for('index'))
+
+@app.route('/delete-word/<word>')
+def delete_word(word):
+    database.delete_word(word)
+    return redirect(url_for('index'))
 
 
 @app.route('/export')
