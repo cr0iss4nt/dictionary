@@ -3,10 +3,11 @@
 {% block title %}Словоформа: {{word}} {% endblock %}
 
 {% block content %}
-<h2>Создать словоформу слова: {{word}}</h2>
-Часть речи: cуществительное
-
-<p>Выберите параметры для образования словоформы.</p>
+<div class="container mb-3">
+    <h2>Создать словоформу слова: {{word}}</h2>
+    <p>Часть речи: существительное</p>
+    <p>Выберите параметры для образования словоформы.</p>
+</div>
 
 <form id="inflection-form" method="POST" action="{{ url_for('inflect_noun') }}">
     <div class="container">

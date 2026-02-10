@@ -3,7 +3,9 @@
 {% block title %}Поиск: {{query}}{% endblock %}
 
 {% block content %}
-<h2>Поиск по запросу: {{query}}</h2>
+<div class="container mb-3">
+    <h2>Поиск по запросу: {{query}}</h2>
+</div>
 {% with words=words%}
     {% include 'words.html'%}
 {% endwith%}

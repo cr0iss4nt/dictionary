@@ -3,7 +3,10 @@
 {% block title %}Изменить слово: {{word}}{% endblock %}
 
 {% block content %}
-<h2>Изменить слово: {{word}}</h2>
+<div class="container mb-3">
+    <h2>Изменить слово: {{word}}</h2>
+</div>
+
 
 <form id="edit-word-form" method="POST" action="{{ url_for('edit_word') }}">
     <div class="container">
