@@ -33,6 +33,8 @@ def clear_db():
     connection.commit()
     connection.close()
 
+    print("Database cleared")
+
 def get_words(query = ''):
     init_db()
 
