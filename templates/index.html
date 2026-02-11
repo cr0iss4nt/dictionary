@@ -8,16 +8,16 @@
 
 <div class="container mb-3">
     <a href="#" onclick="openFileDialog()" class="btn btn-sm btn-success">
-        Импорт
+        <i class="bi bi-download"></i> Импорт
     </a>
 
     <a href="#" onclick="exportDictionary()" class="btn btn-sm btn-primary">
-        Экспорт
+        <i class="bi bi-upload"></i> Экспорт
     </a>
 
     <a href="{{ url_for('clear') }}" class="btn btn-sm btn-danger"
        onclick="return confirm('Очистить словарь?')">
-        Очистить
+        <i class="bi bi-trash"></i> Очистить
     </a>
 </div>
 
@@ -48,11 +48,6 @@ function openFileDialog() {
 function exportDictionary() {
     // show loading state
     const exportBtn = document.querySelector('a[onclick="exportDictionary()"]');
-    const originalText = exportBtn.textContent;
-    exportBtn.textContent = 'Экспорт...';
-    exportBtn.classList.remove('btn-primary');
-    exportBtn.classList.add('btn-secondary');
-    exportBtn.style.pointerEvents = 'none';
 
     // send request to server
     fetch('/export', {
@@ -88,11 +83,6 @@ function exportDictionary() {
         window.URL.revokeObjectURL(url);
         document.body.removeChild(a);
 
-        // restore button state
-        exportBtn.textContent = originalText;
-        exportBtn.classList.add('btn-primary');
-        exportBtn.classList.remove('btn-secondary');
-        exportBtn.style.pointerEvents = 'auto';
     })
     .catch(error => {
         console.error('Error:', error);
