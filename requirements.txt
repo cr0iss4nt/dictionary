@@ -1,0 +1,4 @@
+flask
+pymorphy3
+nltk
+bs4
