@@ -18,6 +18,7 @@ import routes.analyze
 import routes.database
 import routes.inflection
 import routes.search
+import routes.info
 
 
 if __name__ == '__main__':
