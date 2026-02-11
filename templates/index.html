@@ -46,9 +46,6 @@ function openFileDialog() {
 }
 
 function exportDictionary() {
-    // show loading state
-    const exportBtn = document.querySelector('a[onclick="exportDictionary()"]');
-
     // send request to server
     fetch('/export', {
         method: 'GET'
@@ -87,10 +84,6 @@ function exportDictionary() {
     .catch(error => {
         console.error('Error:', error);
         alert('Ошибка при экспорте словаря');
-        exportBtn.textContent = originalText;
-        exportBtn.classList.add('btn-primary');
-        exportBtn.classList.remove('btn-secondary');
-        exportBtn.style.pointerEvents = 'auto';
     });
 }
 
@@ -101,14 +94,6 @@ document.getElementById('fileInput').addEventListener('change', function(e) {
     const file = this.files[0];
     const formData = new FormData();
     formData.append('file', file);
-
-    // loading state
-    const btn = document.querySelector('a[onclick="openFileDialog()"]');
-    const originalText = btn.textContent;
-    btn.textContent = 'Обработка...';
-    btn.classList.remove('btn-success');
-    btn.classList.add('btn-secondary');
-    btn.style.pointerEvents = 'none';
 
     // send to server
     fetch('/import', {
@@ -127,10 +112,6 @@ document.getElementById('fileInput').addEventListener('change', function(e) {
     .catch(error => {
         console.error('Error:', error);
         alert('Ошибка при загрузке файла');
-        btn.textContent = originalText;
-        btn.classList.add('btn-success');
-        btn.classList.remove('btn-secondary');
-        btn.style.pointerEvents = 'auto';
     });
 
     // reset file input
