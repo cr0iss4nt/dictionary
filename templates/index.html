@@ -7,13 +7,13 @@
 <input type="file" id="fileInput" accept=".txt,.rtf" style="display: none;">
 
 <div class="container mb-3">
-    <a href="#" onclick="openFileDialog()" class="btn btn-sm btn-success">
+    <button onclick="openFileDialog()" class="btn btn-sm btn-success">
         <i class="bi bi-download"></i> Импорт
-    </a>
+    </button>
 
-    <a href="#" onclick="exportDictionary()" class="btn btn-sm btn-primary">
+    <button onclick="exportDictionary()" class="btn btn-sm btn-primary">
         <i class="bi bi-upload"></i> Экспорт
-    </a>
+    </button>
 
     <a href="{{ url_for('clear') }}" class="btn btn-sm btn-danger"
        onclick="return confirm('Очистить словарь?')">
